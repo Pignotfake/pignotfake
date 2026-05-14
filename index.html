@@ -4,28 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pignotfake</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
   :root {
-    --bg: #080a10;
-    --card: #0e1120;
-    --tg: #29b6f6;
-    --tg2: #0288d1;
-    --ig1: #f9a825;
-    --ig2: #f4845f;
-    --ig3: #e91e8c;
-    --gold: #f0c080;
-    --text: #eef2ff;
-    --muted: #7a85a8;
-    --border: rgba(120,140,200,0.12);
+    --bg: #eef4ff;
+    --blue: #1a73e8;
+    --dark: #0a1628;
+    --muted: #7b98b8;
+    --border: rgba(26,115,232,0.13);
   }
-
   body {
     background: var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', sans-serif;
+    color: var(--dark);
+    font-family: "Space Grotesk", sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -33,304 +25,250 @@
     overflow: hidden;
     position: relative;
   }
-
-  /* Background */
-  .bg-glow {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  .bg-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+  .blob {
+    position: absolute; border-radius: 50%; filter: blur(90px);
+    animation: blob-move ease-in-out infinite alternate;
   }
-  .glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(100px);
-    opacity: 0.18;
-    animation: breathe ease-in-out infinite alternate;
+  .blob-1 { width: 650px; height: 650px; background: rgba(26,115,232,0.09); top: -220px; right: -120px; animation-duration: 14s; }
+  .blob-2 { width: 420px; height: 420px; background: rgba(3,169,244,0.11); bottom: -110px; left: -90px; animation-duration: 10s; animation-delay: -5s; }
+  .blob-3 { width: 300px; height: 300px; background: rgba(100,181,246,0.13); top: 55%; left: 58%; animation-duration: 8s; animation-delay: -3s; }
+  @keyframes blob-move {
+    from { transform: translate(0,0) scale(1); }
+    to   { transform: translate(28px,38px) scale(1.1); }
   }
-  .glow-tg { width: 500px; height: 500px; background: #29b6f6; top: -150px; left: -100px; animation-duration: 12s; }
-  .glow-ig { width: 450px; height: 450px; background: #e91e8c; bottom: -120px; right: -80px; animation-duration: 10s; animation-delay: -4s; }
-  @keyframes breathe {
-    from { transform: scale(1); }
-    to { transform: scale(1.2) translate(20px, -20px); }
-  }
-
   .grid {
     position: fixed; inset: 0; z-index: 0;
     background-image:
-      linear-gradient(rgba(120,140,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(120,140,255,0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
+      linear-gradient(rgba(26,115,232,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(26,115,232,0.045) 1px, transparent 1px);
+    background-size: 44px 44px;
   }
-
-  /* Particles */
+  .rings { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+  .ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid rgba(26,115,232,0.07);
+    left: 50%; top: 50%; transform: translate(-50%,-50%);
+    animation: ring-pulse ease-in-out infinite;
+  }
+  .ring:nth-child(1) { width: 500px; height: 500px; animation-duration: 6s; }
+  .ring:nth-child(2) { width: 720px; height: 720px; animation-duration: 8s; animation-delay: -2s; }
+  .ring:nth-child(3) { width: 940px; height: 940px; animation-duration: 10s; animation-delay: -4s; }
+  @keyframes ring-pulse {
+    0%,100% { opacity: 0.5; transform: translate(-50%,-50%) scale(1); }
+    50%      { opacity: 0.1; transform: translate(-50%,-50%) scale(1.04); }
+  }
   .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-  .particle {
-    position: absolute; width: 2px; height: 2px;
-    border-radius: 50%; opacity: 0;
-    animation: float-up linear infinite;
-  }
+  .particle { position: absolute; border-radius: 50%; opacity: 0; animation: float-up linear infinite; }
   @keyframes float-up {
-    0%   { transform: translateY(100vh); opacity: 0; }
-    10%  { opacity: 0.6; }
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 0.8; }
     90%  { opacity: 0.2; }
-    100% { transform: translateY(-60px); opacity: 0; }
+    100% { transform: translateY(-60px) scale(1.5); opacity: 0; }
   }
-
-  /* Card */
-  .card {
+  .wrapper {
     position: relative; z-index: 10;
-    width: 90%; max-width: 520px;
-    background: rgba(14, 17, 32, 0.75);
-    border: 1px solid var(--border);
+    width: 90%; max-width: 480px;
+    animation: rise 1s cubic-bezier(.16,1,.3,1) both;
+    padding-bottom: 80px;
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(55px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card {
+    background: rgba(255,255,255,0.84);
+    border: 1px solid rgba(26,115,232,0.14);
     border-radius: 28px;
-    padding: 52px 44px 44px;
-    backdrop-filter: blur(28px);
-    box-shadow: 0 0 100px rgba(41,182,246,0.06), 0 0 60px rgba(233,30,140,0.04), 0 32px 80px rgba(0,0,0,0.6);
-    animation: card-in 1s cubic-bezier(.22,1,.36,1) both;
+    padding: 44px 40px 36px;
+    backdrop-filter: blur(32px);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.65) inset,
+      0 20px 60px rgba(26,115,232,0.11),
+      0 4px 16px rgba(0,0,0,0.05);
+    position: relative; overflow: visible;
   }
-  @keyframes card-in {
-    from { opacity: 0; transform: translateY(50px) scale(0.95); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  /* Top line */
-  .top-stripe {
-    position: absolute; top: 0; left: 10%; right: 10%; height: 2px; border-radius: 0 0 4px 4px;
-    background: linear-gradient(90deg, var(--tg), var(--ig2), var(--ig3));
-  }
-
-  /* Avatar area */
-  .avatar-row {
-    display: flex; justify-content: center; gap: 16px; margin-bottom: 28px;
-    animation: card-in 1s 0.15s cubic-bezier(.22,1,.36,1) both;
-  }
-  .avatar {
-    width: 72px; height: 72px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-  }
-  .avatar-tg {
-    background: linear-gradient(135deg, var(--tg), var(--tg2));
-    box-shadow: 0 0 32px rgba(41,182,246,0.4);
-    animation: pulse-tg 3s ease-in-out infinite;
-  }
-  .avatar-ig {
-    background: linear-gradient(135deg, var(--ig1), var(--ig2), var(--ig3));
-    box-shadow: 0 0 32px rgba(233,30,140,0.35);
-    animation: pulse-ig 3s ease-in-out infinite;
-  }
-  @keyframes pulse-tg {
-    0%,100% { box-shadow: 0 0 32px rgba(41,182,246,0.4); }
-    50%      { box-shadow: 0 0 52px rgba(41,182,246,0.65); }
-  }
-  @keyframes pulse-ig {
-    0%,100% { box-shadow: 0 0 32px rgba(233,30,140,0.35); }
-    50%      { box-shadow: 0 0 52px rgba(233,30,140,0.6); }
-  }
-  .avatar svg { width: 36px; height: 36px; }
-
-  /* Connector */
-  .connector {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--gold); opacity: 0.6;
-    box-shadow: 0 0 12px rgba(240,192,128,0.8);
+  .card::before {
+    content: "";
+    position: absolute; top: 0; left: 10%; right: 10%; height: 2.5px;
+    background: linear-gradient(90deg, transparent, #1a73e8, #03a9f4, #1a73e8, transparent);
+    border-radius: 0 0 4px 4px;
   }
 
-  /* Text */
+  /* Header */
+  .header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 26px;
+    animation: rise 1s 0.1s cubic-bezier(.16,1,.3,1) both;
+  }
   .badge {
-    display: inline-block;
-    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--gold); background: rgba(240,192,128,0.08);
-    border: 1px solid rgba(240,192,128,0.2);
-    padding: 4px 14px; border-radius: 100px; margin-bottom: 14px;
-    animation: card-in 1s 0.2s cubic-bezier(.22,1,.36,1) both;
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(26,115,232,0.08);
+    border: 1px solid rgba(26,115,232,0.18);
+    border-radius: 100px; padding: 5px 14px;
+    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue); font-weight: 500;
   }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #1a73e8; animation: dot-pulse 2s ease-in-out infinite; }
+  @keyframes dot-pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
+  /* Title */
+  .title-block {
+    margin-bottom: 22px;
+    animation: rise 1s 0.18s cubic-bezier(.16,1,.3,1) both;
+  }
   h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.9rem, 5vw, 2.6rem);
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 12px;
-    background: linear-gradient(135deg, var(--text) 40%, var(--muted));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    animation: card-in 1s 0.25s cubic-bezier(.22,1,.36,1) both;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: clamp(3rem, 9vw, 4.4rem);
+    line-height: 0.95; letter-spacing: 0.02em;
+    color: var(--dark); margin-bottom: 10px;
   }
+  h1 span { color: var(--blue); }
+  .subtitle { font-size: 0.86rem; color: var(--muted); font-weight: 300; line-height: 1.6; }
 
-  .desc {
-    font-size: 0.9rem; color: var(--muted); line-height: 1.65;
-    font-weight: 300; margin-bottom: 36px;
-    animation: card-in 1s 0.3s cubic-bezier(.22,1,.36,1) both;
-  }
+  .divider { height: 1px; background: var(--border); margin: 22px 0; }
 
   /* Buttons */
-  .buttons {
-    display: flex; flex-direction: column; gap: 14px;
-    animation: card-in 1s 0.4s cubic-bezier(.22,1,.36,1) both;
-  }
-
+  .btns { display: flex; flex-direction: column; gap: 12px; animation: rise 1s 0.28s cubic-bezier(.16,1,.3,1) both; }
   .btn {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 22px; border-radius: 14px; text-decoration: none;
-    border: 1px solid transparent; cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex; align-items: center; gap: 14px;
+    padding: 17px 22px; border-radius: 18px; text-decoration: none;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s; cursor: pointer;
     position: relative; overflow: hidden;
   }
-  .btn::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
-    opacity: 0; transition: opacity 0.2s;
+  .btn-shine {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, transparent 60%);
+    pointer-events: none;
   }
-  .btn:hover { transform: translateY(-2px); }
-  .btn:hover::before { opacity: 1; }
-  .btn:active { transform: scale(0.99); }
+  .btn:hover { transform: translateY(-3px); }
+  .btn:active { transform: scale(0.98); }
 
-  .btn-tg {
-    background: linear-gradient(135deg, rgba(41,182,246,0.15), rgba(2,136,209,0.1));
-    border-color: rgba(41,182,246,0.25);
-    box-shadow: 0 4px 24px rgba(41,182,246,0.12);
-  }
-  .btn-tg:hover { box-shadow: 0 8px 40px rgba(41,182,246,0.25); }
-
-  .btn-ig {
-    background: linear-gradient(135deg, rgba(249,168,37,0.1), rgba(244,132,95,0.1), rgba(233,30,140,0.1));
-    border-color: rgba(244,132,95,0.25);
-    box-shadow: 0 4px 24px rgba(233,30,140,0.1);
-  }
-  .btn-ig:hover { box-shadow: 0 8px 40px rgba(233,30,140,0.22); }
-
-  .btn-left { display: flex; align-items: center; gap: 14px; }
+  .btn-tg { background: linear-gradient(135deg, #1e88e5, #0d47a1); box-shadow: 0 8px 30px rgba(26,115,232,0.36); }
+  .btn-tg:hover { box-shadow: 0 12px 44px rgba(26,115,232,0.54); }
+  .btn-ig { background: linear-gradient(135deg, #f9a825 0%, #f4845f 35%, #e91e8c 68%, #9c27b0 100%); box-shadow: 0 8px 30px rgba(233,30,140,0.3); }
+  .btn-ig:hover { box-shadow: 0 12px 44px rgba(233,30,140,0.48); }
 
   .btn-icon {
-    width: 44px; height: 44px; border-radius: 12px;
+    width: 44px; height: 44px; border-radius: 13px;
+    background: rgba(255,255,255,0.18);
     display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.22);
   }
-  .btn-icon-tg { background: linear-gradient(135deg, var(--tg), var(--tg2)); }
-  .btn-icon-ig { background: linear-gradient(135deg, var(--ig1), var(--ig2), var(--ig3)); }
-  .btn-icon svg { width: 22px; height: 22px; }
-
-  .btn-info {}
-  .btn-title {
-    display: block; font-size: 0.95rem; font-weight: 600;
-    color: var(--text); letter-spacing: 0.01em; margin-bottom: 2px;
-  }
-  .btn-sub { font-size: 0.75rem; color: var(--muted); font-weight: 300; }
-
+  .btn-icon svg { width: 23px; height: 23px; }
+  .btn-body { flex: 1; }
+  .btn-title { display: block; font-size: 0.96rem; font-weight: 700; color: #fff; letter-spacing: 0.01em; }
+  .btn-sub { font-size: 0.71rem; color: rgba(255,255,255,0.6); font-weight: 300; margin-top: 2px; }
   .btn-arrow {
     width: 30px; height: 30px; border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.2);
     display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s; flex-shrink: 0;
+    flex-shrink: 0; transition: transform 0.2s;
   }
-  .btn:hover .btn-arrow { transform: translateX(3px); }
+  .btn:hover .btn-arrow { transform: translateX(4px); }
 
   /* Stats */
   .stats {
-    display: flex; justify-content: center; gap: 28px;
-    margin-top: 32px; padding-top: 28px;
-    border-top: 1px solid var(--border);
-    animation: card-in 1s 0.5s cubic-bezier(.22,1,.36,1) both;
+    display: grid; grid-template-columns: 1fr 1px 1fr 1px 1fr;
+    align-items: center; margin-top: 24px;
+    animation: rise 1s 0.38s cubic-bezier(.16,1,.3,1) both;
   }
-  .stat { text-align: center; }
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem; font-weight: 700; color: var(--text); display: block;
+  .stat { text-align: center; padding: 8px 4px; }
+  .stat-n { display: block; font-family: "Bebas Neue", sans-serif; font-size: 1.5rem; color: var(--blue); line-height: 1; }
+  .stat-l { font-size: 0.6rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); margin-top: 2px; display: block; }
+  .stat-sep { background: var(--border); align-self: stretch; }
+
+  /* Character */
+  .char-wrap {
+    position: absolute;
+    bottom: -10px; right: -52px;
+    width: 210px; pointer-events: none; z-index: 20;
+    animation: char-float 4s ease-in-out infinite, rise 1.3s 0.55s cubic-bezier(.16,1,.3,1) both;
+    filter: drop-shadow(-4px 20px 32px rgba(26,115,232,0.25));
   }
-  .stat-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-top: 2px; }
-  .stat-divider { width: 1px; background: var(--border); align-self: stretch; }
+  @keyframes char-float {
+    0%,100% { transform: translateY(0) rotate(-1.5deg); }
+    50%      { transform: translateY(-14px) rotate(1.5deg); }
+  }
+  .char-wrap img { width: 100%; display: block; }
 </style>
 </head>
 <body>
-
-<div class="bg-glow">
-  <div class="glow glow-tg"></div>
-  <div class="glow glow-ig"></div>
+<div class="bg-layer">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
 </div>
 <div class="grid"></div>
+<div class="rings"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
 <div class="particles" id="particles"></div>
 
-<div class="card">
-  <div class="top-stripe"></div>
+<div class="wrapper">
+  <div class="card">
 
-  <div class="avatar-row">
-    <div class="avatar avatar-tg">
-      <svg viewBox="0 0 48 48" fill="none"><path d="M24 4C13 4 4 13 4 24s9 20 20 20 20-9 20-20S35 4 24 4zm9.9 13.6l-3.4 16c-.2 1.1-1 1.4-1.9.8l-5.3-3.9-2.5 2.4c-.3.3-.6.4-1.1.4l.4-5.5 9.9-8.9c.4-.4-.1-.6-.7-.2L15.6 30.6l-5.2-1.6c-1.1-.3-1.1-1.1.3-1.6l19.2-7.4c.9-.4 1.7.2 1 1.6z" fill="white"/></svg>
+    <div class="header">
+      <div class="badge"><span class="badge-dot"></span>Official Channel</div>
     </div>
-    <div style="position:relative;display:flex;align-items:center;">
-      <div class="connector"></div>
-    </div>
-    <div class="avatar avatar-ig">
-      <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="36" height="36" rx="10" stroke="white" stroke-width="2.5"/><circle cx="24" cy="24" r="8" stroke="white" stroke-width="2.5"/><circle cx="35" cy="13" r="2" fill="white"/></svg>
-    </div>
-  </div>
 
-  <div style="text-align:center">
-    <div class="badge">✦ Pignotfake</div>
-    <h1>Find us<br>everywhere</h1>
-    <p class="desc">Mods, news & epic village repairs.<br>Pick your platform and follow along.</p>
-  </div>
+    <div class="title-block">
+      <h1>JOIN OUR<br><span>COMMUNITY</span></h1>
+      <p class="subtitle">Fresh mods, news &amp; epic village repairs every day.<br>Pick your platform and follow along.</p>
+    </div>
 
-  <div class="buttons">
-    <a class="btn btn-tg" href="https://t.me/Pignotfake" target="_blank">
-      <div class="btn-left">
-        <div class="btn-icon btn-icon-tg">
+    <div class="divider"></div>
+
+    <div class="btns">
+      <a class="btn btn-tg" href="https://t.me/Pignotfake" target="_blank">
+        <div class="btn-shine"></div>
+        <div class="btn-icon">
           <svg viewBox="0 0 48 48" fill="none"><path d="M24 4C13 4 4 13 4 24s9 20 20 20 20-9 20-20S35 4 24 4zm9.9 13.6l-3.4 16c-.2 1.1-1 1.4-1.9.8l-5.3-3.9-2.5 2.4c-.3.3-.6.4-1.1.4l.4-5.5 9.9-8.9c.4-.4-.1-.6-.7-.2L15.6 30.6l-5.2-1.6c-1.1-.3-1.1-1.1.3-1.6l19.2-7.4c.9-.4 1.7.2 1 1.6z" fill="white"/></svg>
         </div>
-        <div class="btn-info">
+        <div class="btn-body">
           <span class="btn-title">Telegram Channel</span>
-          <span class="btn-sub">@Pignotfake · 1 участник</span>
+          <span class="btn-sub">@Pignotfake &mdash; Join for free</span>
         </div>
-      </div>
-      <div class="btn-arrow">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </a>
+        <div class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </a>
 
-    <a class="btn btn-ig" href="https://www.instagram.com/pignotfake/" target="_blank">
-      <div class="btn-left">
-        <div class="btn-icon btn-icon-ig">
+      <a class="btn btn-ig" href="https://www.instagram.com/pignotfake/" target="_blank">
+        <div class="btn-shine"></div>
+        <div class="btn-icon">
           <svg viewBox="0 0 48 48" fill="none"><rect x="6" y="6" width="36" height="36" rx="10" stroke="white" stroke-width="2.5"/><circle cx="24" cy="24" r="8" stroke="white" stroke-width="2.5"/><circle cx="35" cy="13" r="2" fill="white"/></svg>
         </div>
-        <div class="btn-info">
+        <div class="btn-body">
           <span class="btn-title">Instagram</span>
-          <span class="btn-sub">@pignotfake · 0 followers</span>
+          <span class="btn-sub">@pignotfake &mdash; Follow us</span>
         </div>
-      </div>
-      <div class="btn-arrow">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    </a>
-  </div>
+        <div class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 5h8M5 1l4 4-4 4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      </a>
+    </div>
 
-  <div class="stats">
-    <div class="stat">
-      <span class="stat-num">Daily</span>
-      <span class="stat-label">Updates</span>
+    <div class="stats">
+      <div class="stat"><span class="stat-n">Daily</span><span class="stat-l">Updates</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-n">2</span><span class="stat-l">Platforms</span></div>
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-n">Free</span><span class="stat-l">Forever</span></div>
     </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <span class="stat-num">Free</span>
-      <span class="stat-label">Forever</span>
+
+    <div class="char-wrap">
+      <img src="char.png" alt="Pignotfake">
     </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <span class="stat-num">2</span>
-      <span class="stat-label">Platforms</span>
-    </div>
+
   </div>
 </div>
 
 <script>
-  const c = document.getElementById('particles');
-  const colors = ['#29b6f6','#e91e8c','#f4845f','#f0c080'];
-  for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + 'vw';
-    p.style.animationDuration = (10 + Math.random() * 15) + 's';
-    p.style.animationDelay = (-Math.random() * 20) + 's';
-    const s = 1 + Math.random() * 2.5;
-    p.style.width = p.style.height = s + 'px';
-    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+  const c = document.getElementById("particles");
+  const cols = ["#1a73e8","#03a9f4","#64b5f6","#0d47a1"];
+  for(let i=0;i<30;i++){
+    const p=document.createElement("div"); p.className="particle";
+    p.style.left=Math.random()*100+"vw";
+    p.style.animationDuration=(10+Math.random()*14)+"s";
+    p.style.animationDelay=(-Math.random()*20)+"s";
+    const s=1+Math.random()*3; p.style.width=p.style.height=s+"px";
+    p.style.background=cols[Math.floor(Math.random()*cols.length)];
     c.appendChild(p);
   }
 </script>
