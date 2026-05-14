@@ -23,7 +23,7 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    position: relative; overflow: visible;
+    position: relative;
   }
   .bg-layer { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
   .blob {
@@ -68,8 +68,19 @@
   }
   .wrapper {
     position: relative; z-index: 10;
-    width: 90%; max-width: 600px;
+    width: 90%; max-width: 480px;
     animation: rise 1s cubic-bezier(.16,1,.3,1) both;
+  }
+  .deco {
+    position: absolute;
+    right: -120px; top: 50%; transform: translateY(-50%);
+    pointer-events: none;
+    animation: deco-float 6s ease-in-out infinite;
+    filter: drop-shadow(0 8px 32px rgba(26,115,232,0.3));
+  }
+  @keyframes deco-float {
+    0%,100% { transform: translateY(-50%) rotate(0deg); }
+    50%      { transform: translateY(calc(-50% - 16px)) rotate(10deg); }
   }
   @keyframes rise {
     from { opacity: 0; transform: translateY(55px); }
@@ -178,19 +189,7 @@
   .stat-l { font-size: 0.6rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); margin-top: 2px; display: block; }
   .stat-sep { background: var(--border); align-self: stretch; }
 
-  /* Character */
-  .char-wrap {
-    position: absolute;
-    bottom: -20px; right: -30px;
-    width: 240px; pointer-events: none; z-index: 20;
-    animation: char-float 4s ease-in-out infinite, rise 1.3s 0.55s cubic-bezier(.16,1,.3,1) both;
-    filter: drop-shadow(-4px 20px 32px rgba(26,115,232,0.25));
-  }
-  @keyframes char-float {
-    0%,100% { transform: translateY(0) rotate(-1.5deg); }
-    50%      { transform: translateY(-14px) rotate(1.5deg); }
-  }
-  .char-wrap img { width: 100%; display: block; }
+
 </style>
 </head>
 <body>
@@ -247,16 +246,31 @@
       <div class="stat"><span class="stat-n">Daily</span><span class="stat-l">Updates</span></div>
       <div class="stat-sep"></div>
       <div class="stat"><span class="stat-n">2</span><span class="stat-l">Platforms</span></div>
-
-    </div>
-
-
-    <div class="char-wrap">
-      <img src="char.png" alt="Pignotfake">
+      <div class="stat-sep"></div>
+      <div class="stat"><span class="stat-n">Free</span><span class="stat-l">Forever</span></div>
     </div>
 
   </div>
+
+
 </div>
+
+  <div class="deco">
+    <svg width="90" height="90" viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="45" cy="45" r="44" stroke="rgba(26,115,232,0.18)" stroke-width="1.5"/>
+      <circle cx="45" cy="45" r="32" stroke="rgba(26,115,232,0.25)" stroke-width="1.5" stroke-dasharray="4 6"/>
+      <circle cx="45" cy="45" r="18" fill="rgba(26,115,232,0.10)" stroke="rgba(26,115,232,0.35)" stroke-width="1.5"/>
+      <circle cx="45" cy="45" r="7" fill="#1a73e8" opacity="0.85"/>
+      <!-- orbiting dot -->
+      <circle cx="45" cy="13" r="4" fill="#03a9f4">
+        <animateTransform attributeName="transform" type="rotate" from="0 45 45" to="360 45 45" dur="6s" repeatCount="indefinite"/>
+      </circle>
+      <!-- second orbiting dot -->
+      <circle cx="77" cy="45" r="3" fill="#1a73e8" opacity="0.6">
+        <animateTransform attributeName="transform" type="rotate" from="0 45 45" to="-360 45 45" dur="9s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
 
 <script>
   const c = document.getElementById("particles");
